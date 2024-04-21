@@ -1,55 +1,52 @@
 import streamlit as st
-import time
+import pandas as pd
 
 # Title
-st.title("Streamlit Status and Progress Indicator Examples")
+st.title("Streamlit Data Objects Example")
 
-# Empty
-st.subheader("Empty Element")
-empty_elem = st.empty()
-empty_elem.text("This text will be replaced after 3 seconds...")
-time.sleep(3)
-empty_elem.text("Replaced!")
+# Display JSON data
+st.subheader("JSON Data")
 
-# Progress
-st.subheader("Progress Bar")
-progress_bar = st.progress(0)
-status_text = st.empty()
-for i in range(101):
-    time.sleep(0.05)
-    progress_bar.progress(i)
-    status_text.text(f"Progress: {i}%")
-status_text.text("Progress: Done!")
+# Sample JSON data
+json_data = {
+    "name": "KGP Talkie",
+    "age": 30,
+    "city": "Mumbai"
+}
+st.json(json_data)
 
-# Spinner
-st.subheader("Spinner")
-with st.spinner("Waiting..."):
-    time.sleep(5)
-st.success("Process completed!")
+# Sample DataFrame
+# Display DataFrame
+st.subheader("DataFrame")
 
-# Status
-st.subheader("Status")
-st.status("This is a status message")
+import pandas as pd
+df = pd.read_csv("data/auto.csv")
+st.dataframe(df.head())
 
-# Toast
-st.subheader("Toast")
-st.warning("This is a warning message")
-st.error("This is an error message")
-st.success("This is a success message")
-st.info("This is an info message")
+# Display DataFrame as table
+st.subheader("DataFrame as Table")
+st.table(df.head())
 
-# Snow
-st.subheader("Snow")
-st.snow()
+# Sample code
+st.subheader("Sample Code")
 
-# Balloons
-st.subheader("Balloons")
-st.balloons()
+sample_code = '''
+def greet(name):
+    return "Hello, " + name + "!"
+    
+print(greet("KGP Talkie"))
+'''
+st.code(sample_code, language='python')
 
-# Success, error, warning, info
-st.subheader("Different Alert Types")
-st.success("Success alert message")
-st.error("Error alert message")
-st.warning("Warning alert message")
-st.info("Info alert message")
+# Sample metric
+st.subheader("Sample Metric")
+st.metric("Accuracy", value=0.85, delta=+0.05)
 
+# Sample data editor
+st.subheader("Data Editor")
+edited_data = st.data_editor(df.head())
+
+st.write("Edited DataFrame:")
+st.write(edited_data)
+
+edited_data.to_csv("data/edited_data.csv", index=False)
