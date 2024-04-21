@@ -1,52 +1,78 @@
 import streamlit as st
+import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import altair as alt
+import plotly.express as px
+import seaborn as sns
 
 # Title
-st.title("Streamlit Data Objects Example")
+st.title("Streamlit Plotting Libraries Examples")
 
-# Display JSON data
-st.subheader("JSON Data")
-
-# Sample JSON data
-json_data = {
-    "name": "KGP Talkie",
-    "age": 30,
-    "city": "Mumbai"
-}
-st.json(json_data)
-
-# Sample DataFrame
-# Display DataFrame
-st.subheader("DataFrame")
-
-import pandas as pd
-df = pd.read_csv("data/auto.csv")
+df = pd.read_csv("./2 Tutorials/data/auto.csv")
 st.dataframe(df.head())
+columns = ["mpg","cylinders","displacement","horsepower","weight",
+ "acceleration","year","origin","name"
+]
 
-# Display DataFrame as table
-st.subheader("DataFrame as Table")
-st.table(df.head())
+# Area Chart
+st.subheader("Area Chart")
+st.area_chart(df[['mpg', 'cylinders']])
 
-# Sample code
-st.subheader("Sample Code")
+# Bar Chart
+st.subheader("Bar Chart")
+st.bar_chart(df[['mpg', 'cylinders']].head(20))
 
-sample_code = '''
-def greet(name):
-    return "Hello, " + name + "!"
-    
-print(greet("KGP Talkie"))
-'''
-st.code(sample_code, language='python')
+# Line Chart
+st.subheader("Line Chart")
+st.line_chart(df[['mpg', 'cylinders']].head(100))
 
-# Sample metric
-st.subheader("Sample Metric")
-st.metric("Accuracy", value=0.85, delta=+0.05)
+# Seaborn Plot
+st.subheader("Pyplot / Seaborn Plot")
+fig, ax = plt.subplots()
+corr_plot = sns.heatmap(df[['mpg', "cylinders", "displacement", "horsepower"]].corr(), annot=True)
+st.pyplot(fig)
 
-# Sample data editor
-st.subheader("Data Editor")
-edited_data = st.data_editor(df.head())
+# line plot
+fig, ax = plt.subplots()
+ax.plot(df['mpg'])
+ax.set_xlabel('Index')
+ax.set_ylabel('mpg')
+ax.set_title('Line plot of mpg')
+st.pyplot(fig)
 
-st.write("Edited DataFrame:")
-st.write(edited_data)
+#scatter plot
+fig, ax = plt.subplots()
+ax.scatter(df['mpg'], df['horsepower'])
+ax.set_xlabel('mpg')
+ax.set_ylabel('horsepower')
+ax.set_title('Scatter plot of mpg and horsepower')
+st.pyplot(fig)
 
-edited_data.to_csv("data/edited_data.csv", index=False)
+
+# Plotly Chart
+st.subheader("Plotly Chart")
+fig = px.scatter(df, x='mpg', y='horsepower', color='origin', hover_name='name')
+st.plotly_chart(fig)
+
+
+# Map
+st.subheader("Map")
+temp = pd.read_csv("./2 Tutorials/data/weather_data.csv")
+st.write(temp)
+st.map(temp, latitude='lat', longitude='lon', size='temp')
+
+# Altair Chart
+st.subheader("Altair Chart")
+columns = ["mpg","cylinders","displacement","horsepower","weight",
+ "acceleration","year","origin","name"
+]
+alt_chart = alt.Chart(df).mark_circle().encode(
+    x='mpg',
+    y='horsepower',
+    color='origin',
+    tooltip=['name', 'year']
+).interactive()
+st.write(alt_chart)
+
+
