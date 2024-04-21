@@ -33,4 +33,3 @@ st.write("Slider value:", slider_value)
 select_slider_value = st.select_slider("Select a value:", options=[1, 4, 5, 6, 3, 2, 'NLP'])
 
 st.write("Selected slider value:", select_slider_value)
-
