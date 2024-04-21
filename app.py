@@ -52,3 +52,4 @@ st.success("Success alert message")
 st.error("Error alert message")
 st.warning("Warning alert message")
 st.info("Info alert message")
+
