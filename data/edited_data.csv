@@ -1,6 +1,6 @@
 mpg,cylinders,displacement,horsepower,weight,acceleration,year,origin,name
-182.0,8,307.0,130,3504,12.0,70,1,chevrolet chevelle malibu
-1.0,90,350.0,16,3693,11.5,70,1,buick skylark 320
-184.0,8,318.0,150,3436,11.0,70,1,plymouth satellite
+18.0,8,307.0,130,3504,12.0,70,1,chevrolet chevelle malibu
+15.0,8,350.0,165,3693,11.5,70,1,buick skylark 320
+18.0,8,318.0,150,3436,11.0,70,1,plymouth satellite
 16.0,8,304.0,150,3433,12.0,70,1,amc rebel sst
-173.0,8,302.0,140,3449,10.5,70,1,ford torino
+17.0,8,302.0,140,3449,10.5,70,1,ford torino
