@@ -61,4 +61,4 @@ threshold = st.slider("Background Threshold", 0, 255, value=50, step=5)
 if my_upload is not None:
     remove_bg(upload=my_upload, threshold)
 else:
-    remove_bg("./images/cat.jpg")
+    remove_bg("./images/cat.jpg", threshold)
