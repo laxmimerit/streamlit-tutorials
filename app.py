@@ -1,38 +1,62 @@
+## pip install streamlit #use it on Python 3.8
+from io import BytesIO
+
 import streamlit as st
-import pandas as pd
-from transformers import pipeline
+from PIL import Image
+from rembg import remove
 
-# Function to simulate an expensive computation
-@st.cache_data
-def read_data():
-    df = pd.read_csv("https://github.com/laxmimerit/All-CSV-ML-Data-Files-Download/raw/master/IMDB-Dataset.csv")
-    return df.head()
+from cartooner import cartoonize
+import cv2
 
-# Function to store and retrieve data in session state
-def update_session_state():
-    if 'counter' not in st.session_state:
-        st.session_state.counter = 0
+st.set_page_config(layout="wide", page_title="Image Background Remover")
 
-    st.write("Counter:", st.session_state.counter)
-    st.session_state.counter += 1
+st.write("## Remove background from your image")
+st.write(
+    ":dog: Try uploading an image to watch the background magically removed."
+)
+st.sidebar.write("## Upload and download :gear:")
 
-# Title
-st.title("Working with Caching and Session State")
+# Create the columns
+col1, col2 = st.columns(2)
 
-# Example of caching
-st.button("Increment counter")
-result = read_data()
-st.write("Result of expensive computation:", result)
+# Download the fixed image
+def convert_image(img):
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    byte_im = buf.getvalue()
+    return byte_im
 
-# update session state
-update_session_state()
+# Package the transform into a function
+def remove_bg(upload):
+    image = Image.open(upload)
+    
+    cartoon = cartoonize(image)
+    st.image(cartoon)
 
-# Load NLP model from Hugging Face using caching. It will not reload model again
-@st.cache_resource
-def load_model():
-    model = pipeline("sentiment-analysis")
-    st.success("Loaded NLP model from Hugging Face!")
-    return model
+    col1.write("Original Image :camera:")
+    col1.image(image)
 
-model = load_model()
-st.success("Got model successfully!")
+    fixed = remove(image)
+
+    col2.write("Fixed Image :wrench:")
+    col2.image(fixed)
+    st.sidebar.markdown("---")
+    st.sidebar.download_button(
+        "Download fixed image", convert_image(fixed), "fixed.png", "image/png"
+    )
+
+    # download the cartoonized image
+    img = Image.fromarray(cartoon)
+
+    st.sidebar.download_button(
+        "Download cartoonized image", convert_image(img), "cartoon.png", "image/png"
+    )
+
+# Create the file uploader
+my_upload = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
+
+# Fix the image!
+if my_upload is not None:
+    remove_bg(upload=my_upload)
+else:
+    remove_bg("./images/cat.jpg")
