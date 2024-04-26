@@ -36,7 +36,7 @@ def remove_bg(upload, threshold):
     col1.write("Original Image :camera:")
     col1.image(image)
 
-    fixed = remove(image, alpha_matting_foreground_threshold=threshold)
+    fixed = remove(image, alpha_matting=True, alpha_matting_foreground_threshold=threshold)
 
     col2.write("Fixed Image :wrench:")
     col2.image(fixed)
