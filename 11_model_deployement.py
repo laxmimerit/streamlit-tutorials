@@ -27,7 +27,7 @@ def convert_image(img):
     return byte_im
 
 # Package the transform into a function
-def remove_bg(upload):
+def remove_bg(upload, threshold):
     image = Image.open(upload)
     
     cartoon = cartoonize(image)
@@ -36,7 +36,7 @@ def remove_bg(upload):
     col1.write("Original Image :camera:")
     col1.image(image)
 
-    fixed = remove(image)
+    fixed = remove(image, alpha_matting_foreground_threshold=threshold)
 
     col2.write("Fixed Image :wrench:")
     col2.image(fixed)
@@ -55,8 +55,10 @@ def remove_bg(upload):
 # Create the file uploader
 my_upload = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
 
+threshold = st.slider("Background Threshold", 0, 255, value=50, step=5)
+
 # Fix the image!
 if my_upload is not None:
-    remove_bg(upload=my_upload)
+    remove_bg(upload=my_upload, threshold)
 else:
     remove_bg("./images/cat.jpg")
