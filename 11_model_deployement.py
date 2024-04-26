@@ -55,7 +55,7 @@ def remove_bg(upload, threshold):
 # Create the file uploader
 my_upload = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
 
-threshold = st.slider("Background Threshold", 0, 255, value=50, step=5)
+threshold = st.sidebar.slider("Background Threshold", 0, 255, value=50, step=5)
 
 # Fix the image!
 if my_upload is not None:
