@@ -1,6 +1,6 @@
 cartooner==0.0.2
-rembg==2.0.50
-Pillow==9.3.0
-streamlit==1.21.0
+rembg==2.0.56
+Pillow==10.3.0
+streamlit==1.33
 numba==0.57
 numpy==1.23.0
