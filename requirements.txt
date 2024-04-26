@@ -1,0 +1,3 @@
+rembg==2.0.56
+cartooner==0.0.2
+pillow==10.3.0
