@@ -1,10 +1,8 @@
 ## pip install streamlit #use it on Python 3.8
-from io import BytesIO
-
 import streamlit as st
+from io import BytesIO
 from PIL import Image
 from rembg import remove
-
 from cartooner import cartoonize
 import cv2
 
@@ -16,8 +14,12 @@ st.write(
 )
 st.sidebar.write("## Upload and download :gear:")
 
-# Create the columns
-col1, col2 = st.columns(2)
+# Create the file uploader
+my_upload = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
+
+alpha_matting = st.sidebar.checkbox("Use Alpha Matting", value=True)
+threshold = st.sidebar.slider("Background Threshold", 0, 255, value=50, step=5)
+
 
 # Download the fixed image
 def convert_image(img):
@@ -27,36 +29,36 @@ def convert_image(img):
     return byte_im
 
 # Package the transform into a function
-def remove_bg(upload):
+def remove_bg(upload, threshold, alpha_matting):
     image = Image.open(upload)
-    
-    cartoon = cartoonize(image)
-    st.image(cartoon)
 
+    # Create the columns
+    col1, col2 = st.columns(2)
     col1.write("Original Image :camera:")
     col1.image(image)
 
-    fixed = remove(image)
+    st.write("## Cartoonized Image")
+    cartoon = cartoonize(image)
+    img = Image.fromarray(cartoon)
+    st.image(img)
+
+    fixed = remove(image, alpha_matting=alpha_matting, alpha_matting_foreground_threshold=threshold)
 
     col2.write("Fixed Image :wrench:")
     col2.image(fixed)
     st.sidebar.markdown("---")
+
+
     st.sidebar.download_button(
         "Download fixed image", convert_image(fixed), "fixed.png", "image/png"
     )
-
-    # download the cartoonized image
-    img = Image.fromarray(cartoon)
 
     st.sidebar.download_button(
         "Download cartoonized image", convert_image(img), "cartoon.png", "image/png"
     )
 
-# Create the file uploader
-my_upload = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
-
 # Fix the image!
 if my_upload is not None:
-    remove_bg(upload=my_upload)
+    remove_bg(upload=my_upload, threshold=threshold, alpha_matting=alpha_matting)
 else:
-    remove_bg("./images/cat.jpg")
+    remove_bg("./images/cat.jpg", threshold=threshold, alpha_matting=alpha_matting)
